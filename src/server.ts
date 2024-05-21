@@ -1,12 +1,17 @@
-// getting-started.js
-import mongoose from "mongoose";
-
-main().catch((err) => console.log(err));
+import mongoose from 'mongoose'
+import config from './app/config'
+import app from './app'
 
 async function main() {
   try {
-    await mongoose.connect("mongodb://127.0.0.1:27017/test");
+    await mongoose.connect(config.database_url as string)
+
+    app.listen(config.port, () => {
+      console.log(`Example app listening on ${config.port}`)
+    })
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
 }
+
+main()

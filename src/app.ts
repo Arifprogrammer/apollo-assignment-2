@@ -1,12 +1,25 @@
-import express from "express";
+import express, { Application } from 'express'
+import cors from 'cors'
+import productRouter from './app/modules/product/product.route'
 
-const app = express();
-const port = 3000;
+const app: Application = express()
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+//* middlewares
+app.use(express.json())
+app.use(cors())
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+//* routes
+app.use('/api/v1/product', productRouter)
+
+app.get('/', (req, res) => {
+  res.send('Welcome to the EShop!')
+})
+
+app.get('*', (req, res) => {
+  res.json({
+    success: false,
+    message: 'Route not found',
+  })
+})
+
+export default app
