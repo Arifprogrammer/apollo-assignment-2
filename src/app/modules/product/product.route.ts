@@ -1,13 +1,14 @@
 import express from 'express'
+import {
+  getAllProducts,
+  getSingleProduct,
+  insertProduct,
+} from './product.controller'
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
-  res.json({
-    success: true,
-    message: 'working',
-    data: 'Great',
-  })
-})
+router.post('/products', insertProduct)
+router.get('/products', getAllProducts)
+router.get('/products/:productId', getSingleProduct)
 
-export default router
+export const productRouter = router

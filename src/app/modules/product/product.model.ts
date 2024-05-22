@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose'
 import { TInventory, TProduct, TVariants } from './product.interface'
 
-const variantSchema = new Schema<TVariants>(
+const VariantSchema = new Schema<TVariants>(
   {
     type: {
       type: String,
@@ -15,7 +15,7 @@ const variantSchema = new Schema<TVariants>(
   { _id: false },
 )
 
-const inventorySchema = new Schema<TInventory>(
+const InventorySchema = new Schema<TInventory>(
   {
     quantity: {
       type: Number,
@@ -29,12 +29,10 @@ const inventorySchema = new Schema<TInventory>(
   { _id: false },
 )
 
-const productSchema = new Schema<TProduct>({
+const ProductSchema = new Schema<TProduct>({
   name: {
     type: String,
     required: [true, 'Product name is required.'],
-    minlength: 2,
-    maxlength: 100,
     validate: {
       validator: (value: string) => {
         return value.length > 0
@@ -60,13 +58,13 @@ const productSchema = new Schema<TProduct>({
     required: [true, 'Product tags are required.'],
   },
   variants: {
-    type: [variantSchema],
+    type: [VariantSchema],
     required: [true, 'Product variants are required.'],
   },
   inventory: {
-    type: inventorySchema,
+    type: InventorySchema,
     required: [true, 'Product inventory details are required.'],
   },
 })
 
-export const Product = model<TProduct>('Product', productSchema)
+export const Product = model<TProduct>('Product', ProductSchema)
