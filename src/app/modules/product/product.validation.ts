@@ -10,7 +10,7 @@ const InventoryValidationSchema = z.object({
   inStock: z.boolean(),
 })
 
-export const ProductValidationSchema = z.object({
+export const ProductCreateValidationSchema = z.object({
   name: z.string({ required_error: 'Name is required.' }).trim(),
   description: z.string({ required_error: 'Description is required.' }).trim(),
   price: z.number().nonnegative(),
@@ -26,3 +26,6 @@ export const ProductValidationSchema = z.object({
     }),
   inventory: z.lazy(() => InventoryValidationSchema),
 })
+
+export const ProductUpdateValidationSchema =
+  ProductCreateValidationSchema.partial()

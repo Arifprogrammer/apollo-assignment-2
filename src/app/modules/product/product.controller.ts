@@ -1,12 +1,15 @@
 import { Request, Response } from 'express'
 import { TProduct } from './product.interface'
-import { ProductValidationSchema } from './product.validation'
+import {
+  ProductCreateValidationSchema,
+  ProductUpdateValidationSchema,
+} from './product.validation'
 import { productService } from './product.service'
 
 export async function insertProduct(req: Request, res: Response) {
   try {
     const product: TProduct = req.body
-    const validateProduct = ProductValidationSchema.parse(product)
+    const validateProduct = ProductCreateValidationSchema.parse(product)
     const result = await productService.insertProductInDB(validateProduct)
 
     res.json({
@@ -59,6 +62,51 @@ export async function getSingleProduct(req: Request, res: Response) {
       success: true,
       message: 'Product fetched successfully!',
       data: result,
+    })
+  } catch (error: any) {
+    res.json({
+      success: false,
+      message: error.message || 'Something went wrong',
+      error: error,
+    })
+  }
+}
+
+export async function updateProduct(req: Request, res: Response) {
+  try {
+    const { productId } = req.params
+    const product: TProduct = req.body
+    const validateProduct = ProductUpdateValidationSchema.parse(product)
+
+    const result = await productService.updateProductInDB(
+      productId as string,
+      validateProduct,
+    )
+
+    res.json({
+      success: true,
+      message: 'Product updated successfully!',
+      data: result,
+    })
+  } catch (error: any) {
+    res.json({
+      success: false,
+      message: error.message || 'Something went wrong',
+      error: error,
+    })
+  }
+}
+
+export async function deleteProduct(req: Request, res: Response) {
+  try {
+    const { productId } = req.params
+
+    await productService.deleteProductFromDB(productId as string)
+
+    res.json({
+      success: true,
+      message: 'Product deleted successfully!',
+      data: null,
     })
   } catch (error: any) {
     res.json({
