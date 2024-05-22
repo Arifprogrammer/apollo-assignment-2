@@ -2,12 +2,56 @@ import { Request, Response } from 'express'
 import { TOrder } from './order.interface'
 import { orderService } from './order.service'
 import { OrderValidationSchema } from './order.validation'
+import { productService } from '../product/product.service'
+import { TInventory, TProduct } from '../product/product.interface'
+
+function getProductInventoryData(inventory: TInventory, quantity: number) {
+  return {
+    inventory: {
+      ...inventory,
+      quantity: inventory.quantity - quantity,
+    },
+  }
+}
+
+function getProductStockData(inventory: TInventory) {
+  return {
+    inventory: {
+      ...inventory,
+      inStock: false,
+    },
+  }
+}
 
 export async function insertOrder(req: Request, res: Response) {
   try {
     const order: TOrder = req.body
     const validateOrder = OrderValidationSchema.parse(order) //* validating by using zod
+    const { productId } = order
+    const product: TProduct =
+      await productService.getSingleProductFromDB(productId)
+
+    if (product.inventory.quantity < order.quantity) {
+      res.json({
+        success: false,
+        message: 'Insufficient quantity available in inventory',
+      })
+    }
+
     const result = await orderService.insertOrderInToDB(validateOrder)
+    const { inventory: updatedInventory } =
+      await productService.updateProductInDB(
+        productId,
+        getProductInventoryData(product.inventory, order.quantity),
+      )
+
+    if (updatedInventory.quantity === 0) {
+      await productService.updateProductInDB(
+        productId,
+        getProductStockData(updatedInventory),
+      )
+    }
+    console.log(updatedInventory)
 
     res.json({
       success: true,

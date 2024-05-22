@@ -15,7 +15,7 @@ async function getAllOrdersFromDB(email: string) {
     return result
   }
 
-  throw new Error(`Orders not found with this email - '${email}'`)
+  throw new Error('Order not found')
 }
 
 export const orderService = {
