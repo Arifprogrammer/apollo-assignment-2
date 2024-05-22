@@ -9,10 +9,9 @@ EShop project require **Node** and **npm** (Npm come out of the box with nodejs)
 - Make sure you latest version of nodejs installed then run the following commands:
 
 ```html
-// clone the project first git clone
-https://github.com/Arifprogrammer/apollo-assignment-2.git npm i // run the
-command on the root of the project npm run dev // run the command on the root of
-the project to start the project locally
+git clone https://github.com/Arifprogrammer/apollo-assignment-2.git // clone the project first
+npm i // run the command on the root of the project
+npm run dev // run the command on the root of the project to start the project locally
 ```
 
-then go to : `http://localhost:5000/`
+then go to: `http://localhost:5000/`
