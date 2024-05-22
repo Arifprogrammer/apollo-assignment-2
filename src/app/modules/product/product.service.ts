@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb'
 import { TProduct } from './product.interface'
 import { Product } from './product.model'
 
@@ -24,9 +25,14 @@ async function getAllProductsFromDB(searchTerm: string) {
 }
 
 async function getSingleProductFromDB(productId: string) {
-  //   if (!searchTerm) return await Product.find()
+  const result = await Product.findById({
+    _id: new ObjectId(productId),
+  })
 
-  return await Product.find()
+  if (result) {
+    return result
+  }
+  throw new Error('Product not found')
 }
 
 export const productService = {
