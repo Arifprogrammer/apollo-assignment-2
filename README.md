@@ -15,3 +15,6 @@ npm run dev // run the command on the root of the project to start the project l
 ```
 
 then go to: `http://localhost:5000/`
+
+## Live
+[Link](https://ecommerce-mongoose-zod.vercel.app/)
