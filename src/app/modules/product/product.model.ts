@@ -5,10 +5,12 @@ const VariantSchema = new Schema<TVariants>(
   {
     type: {
       type: String,
+      trim: true,
       required: true,
     },
     value: {
       type: String,
+      trim: true,
       required: true,
     },
   },
@@ -32,6 +34,7 @@ const InventorySchema = new Schema<TInventory>(
 const ProductSchema = new Schema<TProduct>({
   name: {
     type: String,
+    trim: true,
     required: [true, 'Product name is required.'],
     validate: {
       validator: (value: string) => {
@@ -42,6 +45,7 @@ const ProductSchema = new Schema<TProduct>({
   },
   description: {
     type: String,
+    trim: true,
     required: [true, 'Product description is required.'],
   },
   price: {
@@ -51,6 +55,7 @@ const ProductSchema = new Schema<TProduct>({
   },
   category: {
     type: String,
+    trim: true,
     required: [true, 'Product category is required.'],
   },
   tags: {

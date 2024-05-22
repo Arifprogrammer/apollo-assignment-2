@@ -9,7 +9,7 @@ import { productService } from './product.service'
 export async function insertProduct(req: Request, res: Response) {
   try {
     const product: TProduct = req.body
-    const validateProduct = ProductCreateValidationSchema.parse(product)
+    const validateProduct = ProductCreateValidationSchema.parse(product) //* validating by using zod
     const result = await productService.insertProductInDB(validateProduct)
 
     res.json({
@@ -76,7 +76,7 @@ export async function updateProduct(req: Request, res: Response) {
   try {
     const { productId } = req.params
     const product: TProduct = req.body
-    const validateProduct = ProductUpdateValidationSchema.parse(product)
+    const validateProduct = ProductUpdateValidationSchema.parse(product) //* validating by using zod
 
     const result = await productService.updateProductInDB(
       productId as string,

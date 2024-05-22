@@ -9,7 +9,7 @@ async function insertProductInDB(product: TProduct) {
 async function getAllProductsFromDB(searchTerm: string) {
   if (!searchTerm) return await Product.find()
 
-  return await Product.find({
+  const result = await Product.find({
     $or: [
       {
         name: { $regex: searchTerm, $options: 'i' },
@@ -22,6 +22,12 @@ async function getAllProductsFromDB(searchTerm: string) {
       },
     ],
   })
+
+  if (result.length) {
+    return result
+  }
+
+  throw new Error(`Product not matching with the search term - '${searchTerm}'`)
 }
 
 async function getSingleProductFromDB(productId: string) {
@@ -32,6 +38,7 @@ async function getSingleProductFromDB(productId: string) {
   if (result) {
     return result
   }
+
   throw new Error('Product not found')
 }
 
@@ -46,6 +53,7 @@ async function updateProductInDB(
     {
       ...product,
     },
+    //* { new: true } will return updated document
     {
       new: true,
     },
@@ -54,13 +62,20 @@ async function updateProductInDB(
   if (result) {
     return result
   }
-  throw new Error('Product is not updated')
+
+  throw new Error('Product is not updated please check the product Id again')
 }
 
 async function deleteProductFromDB(productId: string) {
-  return await Product.deleteOne({
+  const result = await Product.deleteOne({
     _id: new ObjectId(productId),
   })
+
+  if (result.deletedCount) {
+    return result
+  }
+
+  throw new Error('Product is not deleted please check the product Id again')
 }
 
 export const productService = {
