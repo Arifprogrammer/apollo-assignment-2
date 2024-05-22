@@ -8,8 +8,8 @@ import { TInventory, TProduct } from '../product/product.interface'
 function getProductInventoryData(inventory: TInventory, quantity: number) {
   return {
     inventory: {
-      ...inventory,
       quantity: inventory.quantity - quantity,
+      inStock: inventory.inStock,
     },
   }
 }
@@ -17,7 +17,7 @@ function getProductInventoryData(inventory: TInventory, quantity: number) {
 function getProductStockData(inventory: TInventory) {
   return {
     inventory: {
-      ...inventory,
+      quantity: inventory.quantity,
       inStock: false,
     },
   }
@@ -32,7 +32,7 @@ export async function insertOrder(req: Request, res: Response) {
       await productService.getSingleProductFromDB(productId)
 
     if (product.inventory.quantity < order.quantity) {
-      res.json({
+      return res.json({
         success: false,
         message: 'Insufficient quantity available in inventory',
       })
@@ -51,7 +51,6 @@ export async function insertOrder(req: Request, res: Response) {
         getProductStockData(updatedInventory),
       )
     }
-    console.log(updatedInventory)
 
     res.json({
       success: true,
